@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #e0f2ff; /* 奶油粉藍背景 */
-            --card-bg: rgba(255, 255, 255, 0.96); /* 微透明白色卡片，增加一點不透明度 */
+            --card-bg: rgba(255, 255, 255, 0.98); /* 卡片接近不透明，與清晰背景分離 */
             --text-color: #5a5a5a;
             --candy-blue: #a2d2ff;
             --candy-pink: #ffafcc;
@@ -16,10 +16,12 @@
         }
 
         body {
-            /* === 更新：更大、更明顯的「小腳印與骨頭」SVG 背景 === */
+            /* === 更新：超清晰、超明顯的「小腳印與骨頭」SVG 背景 === */
             background-color: var(--bg-color);
-            /* 重新繪製並放大 SVG：單個循環大小從 60x60 變為 120x120 */
-            background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.3' fill-rule='evenodd'%3E%3C!-- 大腳印 --%3E%3Cpath d='M15 15c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm-9 0c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3z'/%3E%3C!-- 小骨頭 --%3E%3Cpath d='M50 25h10a3 3 0 0 1 0 6H50a3 3 0 0 1 0-6zm-3 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6zm16 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6z' transform='rotate(45 55 28)'/%3E%3C!-- 另一個方向的大腳印 --%3E%3Cpath d='M75 75c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm-9 0c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3z'/%3E%3C!-- 另一個方向的小骨頭 --%3E%3Cpath d='M110 85h10a3 3 0 0 1 0 6h-10a3 3 0 0 1 0-6zm-3 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6zm16 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6z' transform='rotate(-30 115 88)'/%3E%3C/g%3E%3C/svg%3E");
+            /* 1. 將圖案顏色換成 candy-blue (%23a2d2ff) 以增加對比 */
+            /* 2. 將透明度提高到 0.6，讓圖案變得紮實明顯 */
+            /* 3. 調整圖案佈局，讓腳印與骨頭更分散 */
+            background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a2d2ff' fill-opacity='0.6' fill-rule='evenodd'%3E%3C!-- 清晰的大腳印 --%3E%3Cpath d='M20 20c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm-9 0c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3z'/%3E%3C!-- 清晰的小骨頭 --%3E%3Cpath d='M65 40h15a3 3 0 0 1 0 6H65a3 3 0 0 1 0-6zm-3 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6zm21 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6z' transform='rotate(45 75 43)'/%3E%3C!-- 另一個方向的清晰大腳印 --%3E%3Cpath d='M95 95c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm-9 0c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3z'/%3E%3C!-- 另一個方向的清晰小骨頭 --%3E%3Cpath d='M30 100h15a3 3 0 0 1 0 6H30a3 3 0 0 1 0-6zm-3 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6zm21 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6z' transform='rotate(-30 40 103)'/%3E%3C/g%3E%3C/svg%3E");
             
             font-family: "M PLUS Rounded 1c", "Microsoft JhengHei", sans-serif;
             color: var(--text-color);
@@ -57,7 +59,7 @@
             box-shadow: 0 10px 25px rgba(162, 210, 255, 0.15);
             margin-bottom: 25px;
             border: 2px solid #fff;
-            backdrop-filter: blur(4px); /* 稍微降低模糊，讓背景更清楚 */
+            backdrop-filter: blur(2px); /* 清晰背景不需要太多模糊，降低模糊度 */
         }
 
         input {
@@ -151,8 +153,8 @@
 <div class="decor-animal">🐈</div>
 
 <script>
-    // 邏輯保持不變，與上一個版本一致
-    let expenses = JSON.parse(localStorage.getItem('animalBudgetLarge')) || [];
+    // 核心邏輯保持不變，儲存庫名稱稍微更改以與舊版區分
+    let expenses = JSON.parse(localStorage.getItem('animalBudgetV2_Clear')) || [];
 
     window.onload = renderItems;
 
@@ -177,7 +179,7 @@
     }
 
     function saveAndRender() {
-        localStorage.setItem('animalBudgetLarge', JSON.stringify(expenses));
+        localStorage.setItem('animalBudgetV2_Clear', JSON.stringify(expenses));
         renderItems();
     }
 
