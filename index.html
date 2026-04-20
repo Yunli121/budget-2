@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #e0f2ff; /* 奶油粉藍背景 */
-            --card-bg: rgba(255, 255, 255, 0.95); /* 微透明白色卡片 */
+            --card-bg: rgba(255, 255, 255, 0.96); /* 微透明白色卡片，增加一點不透明度 */
             --text-color: #5a5a5a;
             --candy-blue: #a2d2ff;
             --candy-pink: #ffafcc;
@@ -16,9 +16,11 @@
         }
 
         body {
-            /* 加入可愛的小腳印背景圖案 */
+            /* === 更新：更大、更明顯的「小腳印與骨頭」SVG 背景 === */
             background-color: var(--bg-color);
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm2.5 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-5 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm2.5 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z' fill='%23ffffff' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+            /* 重新繪製並放大 SVG：單個循環大小從 60x60 變為 120x120 */
+            background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.3' fill-rule='evenodd'%3E%3C!-- 大腳印 --%3E%3Cpath d='M15 15c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm-9 0c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3z'/%3E%3C!-- 小骨頭 --%3E%3Cpath d='M50 25h10a3 3 0 0 1 0 6H50a3 3 0 0 1 0-6zm-3 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6zm16 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6z' transform='rotate(45 55 28)'/%3E%3C!-- 另一個方向的大腳印 --%3E%3Cpath d='M75 75c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm-9 0c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3zm4.5 6c-1.5 0-3 1.5-3 3s1.5 3 3 3 3-1.5 3-3-1.5-3-3-3z'/%3E%3C!-- 另一個方向的小骨頭 --%3E%3Cpath d='M110 85h10a3 3 0 0 1 0 6h-10a3 3 0 0 1 0-6zm-3 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6zm16 0a3 3 0 0 1 0 6 3 3 0 0 1 0-6z' transform='rotate(-30 115 88)'/%3E%3C/g%3E%3C/svg%3E");
+            
             font-family: "M PLUS Rounded 1c", "Microsoft JhengHei", sans-serif;
             color: var(--text-color);
             margin: 0;
@@ -34,7 +36,6 @@
             position: relative;
         }
 
-        /* 標題加上可愛表情 */
         h2 {
             text-align: center;
             background: var(--candy-yellow);
@@ -56,7 +57,7 @@
             box-shadow: 0 10px 25px rgba(162, 210, 255, 0.15);
             margin-bottom: 25px;
             border: 2px solid #fff;
-            backdrop-filter: blur(5px); /* 毛玻璃效果增加質感 */
+            backdrop-filter: blur(4px); /* 稍微降低模糊，讓背景更清楚 */
         }
 
         input {
@@ -119,7 +120,6 @@
             cursor: pointer;
         }
 
-        /* 裝飾性的小動物圖示 (CSS 繪製) */
         .decor-animal {
             position: fixed;
             bottom: 10px;
@@ -138,7 +138,7 @@
     <div class="input-group">
         <input type="text" id="itemName" placeholder="🐶 想花在哪裡？" required>
         <input type="number" id="itemAmount" placeholder="💰 預計金額" required>
-        <button class="add-btn" onclick="addItem()">給它記下來 ✨</button>
+        <button class="add-btn" onclick="addItem()">記下來 ✨</button>
     </div>
 
     <div class="summary">
@@ -151,7 +151,8 @@
 <div class="decor-animal">🐈</div>
 
 <script>
-    let expenses = JSON.parse(localStorage.getItem('animalBudget')) || [];
+    // 邏輯保持不變，與上一個版本一致
+    let expenses = JSON.parse(localStorage.getItem('animalBudgetLarge')) || [];
 
     window.onload = renderItems;
 
@@ -176,7 +177,7 @@
     }
 
     function saveAndRender() {
-        localStorage.setItem('animalBudget', JSON.stringify(expenses));
+        localStorage.setItem('animalBudgetLarge', JSON.stringify(expenses));
         renderItems();
     }
 
