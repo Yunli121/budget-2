@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 預算本 🐾</title>
+    <style>
+        :root {
+            --bg-color: #e0f2ff; /* 奶油粉藍背景 */
+            --card-bg: rgba(255, 255, 255, 0.95); /* 微透明白色卡片 */
+            --text-color: #5a5a5a;
+            --candy-blue: #a2d2ff;
+            --candy-pink: #ffafcc;
+            --candy-yellow: #ffebaf;
+            --border-color: #cde4f5;
+        }
+
+        body {
+            /* 加入可愛的小腳印背景圖案 */
+            background-color: var(--bg-color);
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm2.5 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-5 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm2.5 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z' fill='%23ffffff' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+            font-family: "M PLUS Rounded 1c", "Microsoft JhengHei", sans-serif;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+        }
+
+        /* 標題加上可愛表情 */
+        h2 {
+            text-align: center;
+            background: var(--candy-yellow);
+            padding: 15px;
+            border-radius: 50px;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(162, 210, 255, 0.15);
+            margin-bottom: 25px;
+            border: 2px solid #fff;
+            backdrop-filter: blur(5px); /* 毛玻璃效果增加質感 */
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+            outline: none;
+            background-color: rgba(249, 253, 255, 0.8);
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--candy-blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(162, 210, 255, 0.3);
+            margin-top: 10px;
+        }
+
+        .summary {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 15px;
+            color: #ff85a2;
+            border: 2px solid #ffdeeb;
+        }
+
+        .item {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border: 1px solid #fff;
+        }
+
+        .delete-btn {
+            background: var(--candy-pink);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 8px 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 裝飾性的小動物圖示 (CSS 繪製) */
+        .decor-animal {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 40px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2> ฅ^•ﻌ•^ฅ 預算小本本 </h2>
+    
+    <div class="input-group">
+        <input type="text" id="itemName" placeholder="🐶 想花在哪裡？" required>
+        <input type="number" id="itemAmount" placeholder="💰 預計金額" required>
+        <button class="add-btn" onclick="addItem()">給它記下來 ✨</button>
+    </div>
+
+    <div class="summary">
+        🐾 預計支出: $<span id="totalAmount">0</span>
+    </div>
+
+    <ul class="item-list" id="itemList"></ul>
+</div>
+
+<div class="decor-animal">🐈</div>
+
+<script>
+    let expenses = JSON.parse(localStorage.getItem('animalBudget')) || [];
+
+    window.onload = renderItems;
+
+    function addItem() {
+        const nameInput = document.getElementById('itemName');
+        const amountInput = document.getElementById('itemAmount');
+        if (!nameInput.value || !amountInput.value) return;
+
+        expenses.push({
+            id: Date.now(),
+            name: nameInput.value,
+            amount: parseFloat(amountInput.value)
+        });
+        saveAndRender();
+        nameInput.value = '';
+        amountInput.value = '';
+    }
+
+    function removeItem(id) {
+        expenses = expenses.filter(item => item.id !== id);
+        saveAndRender();
+    }
+
+    function saveAndRender() {
+        localStorage.setItem('animalBudget', JSON.stringify(expenses));
+        renderItems();
+    }
+
+    function renderItems() {
+        const list = document.getElementById('itemList');
+        const totalDisplay = document.getElementById('totalAmount');
+        let total = 0;
+        list.innerHTML = '';
+        expenses.forEach(item => {
+            total += item.amount;
+            const li = document.createElement('li');
+            li.className = 'item';
+            li.innerHTML = `
+                <div><strong>${item.name}</strong><br><span style="color:var(--candy-blue)">$${item.amount.toLocaleString()}</span></div>
+                <button class="delete-btn" onclick="removeItem(${item.id})">刪除</button>
+            `;
+            list.appendChild(li);
+        });
+        totalDisplay.innerText = total.toLocaleString();
+    }
+</script>
+
+</body>
+</html>
