@@ -6,7 +6,7 @@
     <title>🐾 預算本 🐾</title>
     <style>
         :root {
-            --bg-color: #eaf6ff; /* 奶油粉藍背景 */
+            --bg-color: #eaf6ff;
             --card-bg: rgba(255, 255, 255, 0.98); 
             --text-color: #5a5a5a;
             --candy-blue: #a2d2ff;
@@ -17,10 +17,8 @@
 
         body {
             background-color: var(--bg-color);
-            /* === 簡約淡色點點背景 === */
             background-image: radial-gradient(#cbdff1 1.5px, transparent 1.5px);
             background-size: 24px 24px;
-            
             font-family: "M PLUS Rounded 1c", "Microsoft JhengHei", sans-serif;
             color: var(--text-color);
             margin: 0;
@@ -43,7 +41,6 @@
             border: 3px solid #fff;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-bottom: 30px;
-            font-size: 1.3rem;
         }
 
         .input-group {
@@ -93,16 +90,46 @@
             border: 2px solid #ffdeeb;
         }
 
+        /* --- 明細置中排版 --- */
         .item {
             background: var(--card-bg);
             border-radius: 20px;
             padding: 18px;
             margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto; /* 右側固定放刪除鈕 */
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.02);
             border: 1px solid #fff;
+        }
+
+        .item-content {
+            text-align: center; /* 內容置中 */
+            padding-left: 50px; /* 補償右側按鈕空間，讓視覺真正靠中 */
+        }
+
+        /* 可編輯區域的提示感 */
+        [contenteditable="true"] {
+            outline: none;
+            padding: 2px 5px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        [contenteditable="true"]:focus {
+            background: #fff9e6;
+            border-bottom: 2px dashed var(--candy-yellow);
+        }
+
+        .item-name {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .item-amount {
+            color: var(--candy-blue);
+            font-size: 0.95rem;
         }
 
         .delete-btn {
@@ -141,13 +168,13 @@
         🐾 預計支出: $<span id="totalAmount">0</span>
     </div>
 
-    <ul class="item-list" id="itemList"></ul>
+    <div id="itemList"></div>
 </div>
 
 <div class="decor-animal">🐈</div>
 
 <script>
-    let expenses = JSON.parse(localStorage.getItem('dotBudgetApp')) || [];
+    let expenses = JSON.parse(localStorage.getItem('editableBudgetApp')) || [];
 
     window.onload = renderItems;
 
@@ -171,8 +198,23 @@
         saveAndRender();
     }
 
+    // --- 編輯功能更新邏輯 ---
+    function updateItem(id, field, value) {
+        const index = expenses.findIndex(item => item.id === id);
+        if (index === -1) return;
+
+        if (field === 'amount') {
+            // 清除非數字字元並轉成數值
+            let cleanValue = parseFloat(value.replace(/[^0-9.]/g, ''));
+            expenses[index].amount = isNaN(cleanValue) ? 0 : cleanValue;
+        } else {
+            expenses[index].name = value;
+        }
+        saveAndRender();
+    }
+
     function saveAndRender() {
-        localStorage.setItem('dotBudgetApp', JSON.stringify(expenses));
+        localStorage.setItem('editableBudgetApp', JSON.stringify(expenses));
         renderItems();
     }
 
@@ -181,15 +223,21 @@
         const totalDisplay = document.getElementById('totalAmount');
         let total = 0;
         list.innerHTML = '';
+
         expenses.forEach(item => {
             total += item.amount;
-            const li = document.createElement('li');
-            li.className = 'item';
-            li.innerHTML = `
-                <div><strong>${item.name}</strong><br><span style="color:var(--candy-blue)">$${item.amount.toLocaleString()}</span></div>
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = `
+                <div class="item-content">
+                    <span class="item-name" contenteditable="true" 
+                          onblur="updateItem(${item.id}, 'name', this.innerText)">${item.name}</span>
+                    <span class="item-amount" contenteditable="true" 
+                          onblur="updateItem(${item.id}, 'amount', this.innerText)">$${item.amount.toLocaleString()}</span>
+                </div>
                 <button class="delete-btn" onclick="removeItem(${item.id})">刪除</button>
             `;
-            list.appendChild(li);
+            list.appendChild(div);
         });
         totalDisplay.innerText = total.toLocaleString();
     }
